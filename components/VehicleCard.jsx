@@ -1,0 +1,89 @@
+"use client";
+import React from "react";
+import flyToHeader from "@/libs/animations";
+
+export default function VehicleCard({ data, setFavourited }) {
+  const showrooms = [
+    "Guildform showroom",
+    "London showroom",
+    "Worchester showroom",
+  ];
+
+  const handleFavouriteClick = (e) => {
+    const button = e.currentTarget;
+    const isActive = button.classList.contains(
+      "vehicle-card__heart-btn--active"
+    );
+
+    if (isActive) {
+      button.classList.remove("vehicle-card__heart-btn--active");
+    } else {
+      button.classList.add("vehicle-card__heart-btn--active");
+      const svg = button.querySelector("svg");
+      flyToHeader(svg);
+    }
+
+    // any card active?
+    const anyActive =
+      document.querySelectorAll(".vehicle-card__heart-btn--active").length > 0;
+    setFavourited(anyActive);
+  };
+
+  return (
+    <>
+      {data.map((vehicle, index) => (
+        <div
+          key={`${vehicle.name}-${index}`}
+          className={`vehicle-card ${
+            index % 2 === 0 ? "vehicle-card--even" : "vehicle-card--odd"
+          }`}
+        >
+          <div className="vehicle-card__image-wrapper">
+            <div className="vehicle-card__attributes">
+              {vehicle.attributes.map((attr, i) => (
+                <span key={`${attr}-${i}`}>{attr}</span>
+              ))}
+            </div>
+
+            <button
+              className="vehicle-card__heart-btn"
+              onClick={handleFavouriteClick}
+            >
+              <svg
+                width="14"
+                height="13"
+                viewBox="0 0 14 13"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M10.0215 1C10.9544 1 11.7449 1.32592 12.418 1.99316L12.4199 1.99512C12.7647 2.33289 13.0274 2.71957 13.2109 3.15723V3.15918C13.4032 3.61439 13.5 4.09297 13.5 4.59863C13.4999 5.1503 13.3838 5.66558 13.1523 6.15039C12.9199 6.63718 12.5974 7.04698 12.1816 7.38379L12.1709 7.39258L12.1611 7.40137L9.4834 9.79688C8.15941 10.98 7.34026 11.7106 7.02637 11.9902C7.01884 11.996 7.01523 11.9978 7.01465 11.998C7.01342 11.9985 7.0092 12 7 12C6.98983 12 6.98595 11.9983 6.98535 11.998C6.98443 11.9977 6.98061 11.9965 6.97363 11.9912C6.51877 11.5907 5.35529 10.5477 3.47949 8.86035L3.47754 8.8584L1.92188 7.4834H1.9209C1.88062 7.44563 1.83921 7.40814 1.79492 7.37305H1.7959C1.3888 7.0368 1.07451 6.63026 0.850586 6.14844C0.625618 5.66434 0.508127 5.1514 0.5 4.60449V4.60352L0.501953 4.4209C0.517463 3.99534 0.611827 3.58102 0.787109 3.17578L0.790039 3.1709C0.973571 2.73321 1.23623 2.34659 1.58105 2.00879L1.58496 2.00488C2.25843 1.32943 3.04767 1.00009 3.97852 1C4.48769 1 4.96829 1.1084 5.4248 1.32617C5.88278 1.54465 6.2792 1.85285 6.61719 2.25488L7 2.70996L7.38281 2.25488C7.72084 1.85278 8.11813 1.54467 8.57617 1.32617C9.03255 1.10852 9.51248 1.00002 10.0215 1Z" />
+              </svg>
+            </button>
+
+            <img
+              src={vehicle.image_path}
+              alt={vehicle.name}
+              className="vehicle-card__img"
+            />
+          </div>
+
+          <div className="vehicle-card__info">
+            <h1 className="vehicle-card__name">{vehicle.name}</h1>
+            <h2 className="vehicle-card__showroom">
+              {showrooms[index % showrooms.length]}
+            </h2>
+            <div className="vehicle-card__specs">
+              <div className="vehicle-card__spec">
+                <img src="/icons/icon-engine.svg" alt="Engine" />
+                <span>{vehicle.engine}</span>
+              </div>
+              <div className="vehicle-card__spec">
+                <img src="/icons/icon-gear.svg" alt="Gearbox" />
+                <span>{vehicle.gearbox}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </>
+  );
+}
